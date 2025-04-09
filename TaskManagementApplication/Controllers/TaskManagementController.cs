@@ -3,6 +3,9 @@ using TaskManagementApplication.Interfaces;
 
 namespace TaskManagementApplication.Controllers;
 
+/// <summary>
+/// This controller handles all the API endpoints related to task management.
+/// </summary>
 [ApiController]
 [Route("api/[controller]")]
 public class TaskManagementController : ControllerBase

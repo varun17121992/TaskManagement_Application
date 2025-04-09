@@ -1,6 +1,10 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
 namespace TaskManagementApplication.Models;
+
+/// <summary>
+/// Represents a task in the task management system.
+/// </summary>
 public class BoardTask
 {
     [Required]

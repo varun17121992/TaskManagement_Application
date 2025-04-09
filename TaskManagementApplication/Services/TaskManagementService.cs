@@ -4,11 +4,11 @@ using TaskManagementApplication.Models;
 namespace TaskManagementApplication.Services;
 
 /// <summary>
-/// This service handls everything related to CRUD on tasks
+/// This service handls everything related to CRUD and various other operations on tasks
 /// </summary>
 public class TaskManagementService : ITaskManagementService
 {
-    private readonly List<TaskColumn> _columns = new();
+    private readonly List<TaskColumn> _taskColumns = new();
     private readonly ILogger<TaskManagementService> _logger;
 
     public TaskManagementService(ILogger<TaskManagementService> logger)
@@ -18,9 +18,9 @@ public class TaskManagementService : ITaskManagementService
 
     public void AddColumn(string name)
     {
-        if (!_columns.Any(c => c.Name.Equals(name, StringComparison.OrdinalIgnoreCase)))
+        if (!_taskColumns.Any(c => c.Name.Equals(name, StringComparison.OrdinalIgnoreCase)))
         {
-            _columns.Add(new TaskColumn { Name = name });
+            _taskColumns.Add(new TaskColumn { Name = name });
         }       
     }
 
@@ -28,7 +28,7 @@ public class TaskManagementService : ITaskManagementService
     {
         try
         {
-            var column = _columns.FirstOrDefault(c => c.Name.Equals(columnName, StringComparison.OrdinalIgnoreCase));
+            var column = _taskColumns.FirstOrDefault(c => c.Name.Equals(columnName, StringComparison.OrdinalIgnoreCase));
             if (column == null)
             {
                 throw new ArgumentException("Column not found");
@@ -73,7 +73,7 @@ public class TaskManagementService : ITaskManagementService
     {
         try
         {
-            foreach (var column in _columns)
+            foreach (var column in _taskColumns)
             {
                 var boardTask = column.Tasks.FirstOrDefault(t => t.Id == taskId);
                 if (boardTask == null)
@@ -113,14 +113,14 @@ public class TaskManagementService : ITaskManagementService
     {
         try
         {
-            var fromColumn = _columns.FirstOrDefault(c => c.Tasks.Any(t => t.Id == taskId));
+            var fromColumn = _taskColumns.FirstOrDefault(c => c.Tasks.Any(t => t.Id == taskId));
             var BoardTask = fromColumn?.Tasks.FirstOrDefault(t => t.Id == taskId);
             if (fromColumn == null || BoardTask == null)
             {
                 throw new ArgumentException("BoardTask not found");
             }
 
-            var destColumn = _columns.FirstOrDefault(c => c.Name.Equals(toColumn, StringComparison.OrdinalIgnoreCase));
+            var destColumn = _taskColumns.FirstOrDefault(c => c.Name.Equals(toColumn, StringComparison.OrdinalIgnoreCase));
             if (destColumn == null)
             {
                 throw new ArgumentException("Destination column not found");
@@ -140,7 +140,7 @@ public class TaskManagementService : ITaskManagementService
     {
         try
         {
-            var column = _columns.FirstOrDefault(c => c.Name.Equals(columnName, StringComparison.OrdinalIgnoreCase));
+            var column = _taskColumns.FirstOrDefault(c => c.Name.Equals(columnName, StringComparison.OrdinalIgnoreCase));
             if (column == null) throw new ArgumentException("Column not found");
 
             return column.Tasks
@@ -156,6 +156,6 @@ public class TaskManagementService : ITaskManagementService
     }
 
     private BoardTask? GetTaskById(Guid taskId) =>
-        _columns.SelectMany(c => c.Tasks).FirstOrDefault(t => t.Id == taskId);
+        _taskColumns.SelectMany(c => c.Tasks).FirstOrDefault(t => t.Id == taskId);
 }
 
